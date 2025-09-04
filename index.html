@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Budget</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #fdfdfd;
+  margin: 0;
+  padding: 0;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 400px;
+  border: 2px solid #ccc;
+  font-size: 18px;
+}
+th, td {
+  border: 1px solid #ddd;
+  text-align: center;
+  position: relative;
+  min-width: 60px;
+  min-height: 30px;
+  overflow: hidden;
+}
+th {
+  background: #e0e0e0;
+  font-weight: bold;
+  color: #333;
+}
+.serial {
+  background: #f2f2f2;
+  font-weight: bold;
+  color: #333;
+}
+input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  text-align: center;
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+input:focus {
+  background: #fff8e1;
+}
+.add-btn, .delete-btn {
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 2px;
+}
+.add-btn {
+  background: #4caf50;
+}
+.add-btn:hover {
+  background: #5eda63;
+}
+.delete-btn {
+  background: #db2d2d;
+}
+.delete-btn:hover {
+  background: #ef5d5d;
+}
+.highlight {
+  background: gold !important;
+}
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background: #3333333c;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  font-weight: bold;
+  font-size: 18px;
+  z-index: 1000;
+  padding: 5px;
+}
+.bottom-bar button {
+  background: #666;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  font-size: 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.bottom-bar button:hover {
+  background: #555;
+}
+.right-bar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100%;
+  background: #3333333c;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 80px;
+  gap: 10px;
+  z-index: 1000;
+}
+.right-bar button {
+  background: #666;
+  color: #fff;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  width: 80px;
+}
+.right-bar button:hover {
+  background: #555;
+}
+.cell-resize-handle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 10px;
+  height: 10px;
+  background: #aaa;
+  cursor: se-resize;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+td:hover .cell-resize-handle {
+  opacity: 1;
+}
+#splash {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #2ddb7b;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 48px;
+        font-weight: bold;
+        z-index: 9999;
+        opacity: 1;
+        transition: opacity 1s ease;
+    }
+    #splash.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+    #main-content {
+        display: none;
+        text-align: center;
+        margin-top: 0.1px;
+        font-size: 24px;
+    }
+.toggle-btn {
+        position: fixed;
+        bottom: 10px;
+        left: 60px;
+        background-color: #333;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        font-size: 18px;
+        border-radius: 4px;
+        cursor: pointer;
+        z-index: 10000;
+    }   
+.hidden-bar {
+  display: none !important;
+}
+
+.hidden-bottom {
+  display: none !important;
+}
+
+</style>
+</head>
+<body>
+    <div id="splash">Budget</div>
+<div id="main-content">
+<button class="toggle-btn" onclick="toggleBars()">Toggle Bars</button>    
+  <table id="table"><tbody></tbody></table>   
+<div class="right-bar">
+  <button onclick="addColumn()">+ Col</button>
+  <button onclick="deleteLastColumn()">🗑 Col</button>
+</div>
+<div class="bottom-bar">
+  <button onclick="addRow()">+ Row</button>
+  <button onclick="deleteLastRow()">🗑 Row</button>
+  <button onclick="downloadSheet()">_&darr;_ Download</button>
+  <button onclick="clearDatabase()">C Clear</button>
+</div>
+</div>
+<script>
+window.onload = function() {
+        setTimeout(() => {
+            document.getElementById('splash').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('splash').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+            }, 1000);
+        }, 2000); 
+    };
+
+let db;
+const request = indexedDB.open("DynamicTableDB", 8);
+request.onupgradeneeded = function(e) {
+  db = e.target.result;
+  if (!db.objectStoreNames.contains("meta")) db.createObjectStore("meta", { keyPath: "id" });
+  if (!db.objectStoreNames.contains("cells")) db.createObjectStore("cells", { keyPath: "key" });
+};
+request.onsuccess = function(e) {
+  db = e.target.result;
+  initTable();
+};
+
+function initTable() {
+  getMeta().then(meta => {
+    if (!meta) {
+      saveMeta({ id: 1, rows: 2, cols: 2 }).then(() => {
+        for (let r=0;r<2;r++) for (let c=0;c<2;c++) saveCell(r,c,"");
+        loadTable();
+      });
+    } else {
+      loadTable();
+    }
+  });
+}
+function getMeta() {
+  return new Promise(resolve => {
+    const tx = db.transaction("meta","readonly").objectStore("meta").get(1);
+    tx.onsuccess = e => resolve(e.target.result);
+  });
+}
+function saveMeta(meta) {
+  return new Promise(resolve => {
+    const tx = db.transaction("meta","readwrite").objectStore("meta").put(meta);
+    tx.onsuccess = () => resolve();
+  });
+}
+function saveCell(r,c,v) {
+  return new Promise(resolve => {
+    const tx = db.transaction("cells","readwrite").objectStore("cells").put({key:r+","+c, value:v});
+    tx.onsuccess = () => resolve();
+  });
+}
+function deleteCell(r,c) {
+  return new Promise(resolve => {
+    const tx = db.transaction("cells","readwrite").objectStore("cells").delete(r+","+c);
+    tx.onsuccess = () => resolve();
+  });
+}
+function getAllCells() {
+  return new Promise(resolve => {
+    const tx = db.transaction("cells","readonly").objectStore("cells").getAll();
+    tx.onsuccess = e => resolve(e.target.result);
+  });
+}
+function toggleBars() {
+    document.querySelector(".right-bar").classList.toggle("hidden-bar");
+    document.querySelector(".bottom-bar").classList.toggle("hidden-bottom");
+}
+function getColumnLabel(index) {
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const cycle = Math.floor(index / 26);
+  const letter = letters[index % 26];
+  return cycle === 0 ? letter : letter + (cycle + 1);
+}
+async function loadTable() {
+  const meta = await getMeta();
+  const cells = await getAllCells();
+  const tbody = document.querySelector('#table tbody');
+  tbody.innerHTML = '';
+  const headerRow = document.createElement('tr');
+  const emptyHeader = document.createElement('th');
+  emptyHeader.textContent = '◢';
+  headerRow.appendChild(emptyHeader);
+  for (let c=0;c<meta.cols;c++) {
+    const th = document.createElement('th');
+    th.textContent = getColumnLabel(c);
+    headerRow.appendChild(th);
+  }
+  const thEmpty = document.createElement('th');
+  headerRow.appendChild(thEmpty);
+  tbody.appendChild(headerRow);
+
+  for (let r=0;r<meta.rows;r++) {
+    const tr = document.createElement('tr');
+    const serialTd = document.createElement('td');
+    serialTd.className = 'serial';
+    serialTd.textContent = r + 1;
+    tr.appendChild(serialTd);
+    for (let c=0;c<meta.cols;c++) {
+      const td = document.createElement('td');
+      const input = document.createElement('input');
+      const cell = cells.find(x => x.key === r+","+c);
+      input.value = cell ? cell.value : "";
+      input.oninput = () => saveCell(r,c,input.value);
+      input.onfocus = () => highlightHeaders(r, c);
+      input.onblur = () => removeHighlight();
+      td.appendChild(input);
+
+      const handle = document.createElement('div');
+      handle.className = 'cell-resize-handle';
+      handle.onmousedown = (e) => initCellResize(e, td);
+      td.appendChild(handle);
+
+      tr.appendChild(td);
+    }
+    const tdBtn = document.createElement('td');
+    const addBtn = document.createElement('button');
+    addBtn.textContent = '+';
+    addBtn.className = 'add-btn';
+    addBtn.onclick = () => addColumn();
+    const delBtn = document.createElement('button');
+    delBtn.textContent = '🗑';
+    delBtn.className = 'delete-btn';
+    delBtn.onclick = () => deleteLastColumn();
+    tdBtn.appendChild(addBtn);
+    tdBtn.appendChild(delBtn);
+    tr.appendChild(tdBtn);
+    tbody.appendChild(tr);
+  }
+
+  const trAddRow = document.createElement('tr');
+  const emptySerial = document.createElement('td');
+  emptySerial.className = 'serial';
+  trAddRow.appendChild(emptySerial);
+  for (let c=0;c<meta.cols;c++) {
+    const td = document.createElement('td');
+    const addBtn = document.createElement('button');
+    addBtn.textContent = '+';
+    addBtn.className = 'add-btn';
+    addBtn.onclick = () => addRow();
+    const delBtn = document.createElement('button');
+    delBtn.textContent = '🗑';
+    delBtn.className = 'delete-btn';
+    delBtn.onclick = () => deleteLastRow();
+    td.appendChild(addBtn);
+    td.appendChild(delBtn);
+    trAddRow.appendChild(td);
+  }
+  const tdEmpty = document.createElement('td');
+  trAddRow.appendChild(tdEmpty);
+  tbody.appendChild(trAddRow);
+}
+async function addRow() {
+  const meta = await getMeta();
+  const newRow = meta.rows;
+  for (let c=0;c<meta.cols;c++) await saveCell(newRow,c,"");
+  meta.rows++;
+  await saveMeta(meta);
+  loadTable();
+}
+async function addColumn() {
+  const meta = await getMeta();
+  const newCol = meta.cols;
+  for (let r=0;r<meta.rows;r++) await saveCell(r,newCol,"");
+  meta.cols++;
+  await saveMeta(meta);
+  loadTable();
+}
+async function deleteLastRow() {
+  const meta = await getMeta();
+  if (meta.rows <= 1) return;
+  const lastRow = meta.rows - 1;
+  for (let c=0;c<meta.cols;c++) await deleteCell(lastRow,c);
+  meta.rows--;
+  await saveMeta(meta);
+  loadTable();
+}
+async function deleteLastColumn() {
+  const meta = await getMeta();
+  if (meta.cols <= 1) return;
+  const lastCol = meta.cols - 1;
+  for (let r=0;r<meta.rows;r++) await deleteCell(r,lastCol);
+  meta.cols--;
+  await saveMeta(meta);
+  loadTable();
+}
+function highlightHeaders(rowIndex, colIndex) {
+  document.querySelectorAll('th').forEach(th => th.classList.remove('highlight'));
+  document.querySelectorAll('.serial').forEach(td => td.classList.remove('highlight'));
+  const header = document.querySelectorAll('th')[colIndex+1];
+  const rowHeader = document.querySelectorAll('.serial')[rowIndex];
+  if (header) header.classList.add('highlight');
+  if (rowHeader) rowHeader.classList.add('highlight');
+}
+function removeHighlight() {
+  document.querySelectorAll('th').forEach(th => th.classList.remove('highlight'));
+  document.querySelectorAll('.serial').forEach(td => td.classList.remove('highlight'));
+}
+async function downloadSheet() {
+  const meta = await getMeta();
+  const cells = await getAllCells();
+  let csv = ",";
+  for (let c=0;c<meta.cols;c++) csv += getColumnLabel(c)+",";
+  csv += "\n";
+  for (let r=0;r<meta.rows;r++) {
+    csv += (r+1)+",";
+    for (let c=0;c<meta.cols;c++) {
+      const cell = cells.find(x => x.key === r+","+c);
+      csv += (cell ? cell.value : "")+",";
+    }
+    csv += "\n";
+  }
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "sheet.csv";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+function clearDatabase() {
+  indexedDB.deleteDatabase("DynamicTableDB");
+  location.reload();
+}
+
+let startX, startY, startWidth, startHeight;
+function initCellResize(e, cell) {
+  e.preventDefault();
+  startX = e.clientX;
+  startY = e.clientY;
+  startWidth = cell.offsetWidth;
+  startHeight = cell.offsetHeight;
+
+  document.onmousemove = (ev) => {
+    const diffX = ev.clientX - startX;
+    const diffY = ev.clientY - startY;
+    cell.style.width = Math.max(40, startWidth + diffX) + 'px';
+    cell.style.height = Math.max(30, startHeight + diffY) + 'px';
+  };
+
+  document.onmouseup = () => {
+    document.onmousemove = null;
+    document.onmouseup = null;
+  };
+}
+</script>
+<div id="draggableainameWidget" style="position:absolute; width:100%; height:100%;">
+  <button id="draggableainameFloatButton"
+    style="position:absolute; top:50%; left:5%; transform:translate(-50%,-50%);
+           padding:20px 24px; background-color:#0077cc; color:#fff; border:5px solid #fff;
+           border-radius:50%; cursor:grab; font-size:20px; font-weight:bold;
+           box-shadow:0 4px 8px rgba(0,0,0,0.2); user-select:none; z-index:1000;">
+    AI
+  </button>
+
+  <iframe id="draggableainameIframe"
+    style="position:fixed; top:0; right:0; width:20vw; height:100vh; border:none; background:#fff;
+           box-shadow:-4px 0 12px rgba(0,0,0,0.2); display:none; z-index:999;"
+    srcdoc="<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<style>
+  body { margin:0; font-family:Arial,sans-serif; background:#fff; display:flex; flex-direction:column; height:100%; }
+  #draggableainameHeader { position:relative; background:#0077cc; color:#fff; text-align:center; padding:12px; font-weight:bold; font-size:18px; }
+  #draggableainameCloseButton { position:absolute; top:10px; right:10px; padding:6px 12px; background:#ff0000; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold; font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,0.2); }
+  #draggableainameCloseButton:hover { opacity:.9; }
+  #draggableainameContent { flex:1; padding:10px; display:flex; flex-direction:column; gap:10px; }
+  #draggableainameUserInput { width:90%; padding:8px; font-size:14px; border:1px solid #ccc; border-radius:6px; }
+  .draggableainameAskButton { padding:8px; background:#0077cc; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; }
+  .draggableainameAskButton:hover { background:#005fa3; }
+  #draggableainameResponse { margin-top:10px; font-size:14px; color:#333; overflow-y:auto; max-height:70%; border-top:1px solid #ccc; padding-top:8px; white-space:pre-wrap; }
+</style>
+</head>
+<body>
+  <div id='draggableainameHeader'>Ask AI
+    <button id='draggableainameCloseButton' aria-label='Close panel'>X</button>
+  </div>
+  <div id='draggableainameContent'>
+    <input type='text' id='draggableainameUserInput' placeholder='Type your question...'>
+    <button class='draggableainameAskButton' id='draggableainameAskButton'>Ask AI</button>
+    <div id='draggableainameResponse'>Response will appear here...</div>
+  </div>
+<script>
+  (function(){
+    const draggableainameAskButton = document.getElementById('draggableainameAskButton');
+    const draggableainameResponse = document.getElementById('draggableainameResponse');
+    const draggableainameUserInput = document.getElementById('draggableainameUserInput');
+    const draggableainameCloseButton = document.getElementById('draggableainameCloseButton');
+
+    draggableainameCloseButton.addEventListener('click', function(){
+      parent.postMessage({ type: 'draggableainame-close-iframe' }, '*');
+    });
+
+    draggableainameAskButton.addEventListener('click', async function(){
+      const draggableainameQuestion = (draggableainameUserInput.value || '').trim();
+      if(!draggableainameQuestion){
+        draggableainameResponse.innerHTML = '<span style=&quot;color:red;&quot;>Please enter a question.</span>';
+        return;
+      }
+      draggableainameResponse.innerHTML = '<em>Thinking...</em>';
+
+      try {
+        const draggableainameRes = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyC5ab-HZmvtoTEXMRBMb4-tPpwD2yMVF1A', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents: [ { parts: [ { text: draggableainameQuestion } ] } ] })
+        });
+        const draggableainameData = await draggableainameRes.json();
+        const draggableainameText =
+          (draggableainameData && draggableainameData.candidates && draggableainameData.candidates[0] &&
+           draggableainameData.candidates[0].content && draggableainameData.candidates[0].content.parts &&
+           draggableainameData.candidates[0].content.parts[0] && draggableainameData.candidates[0].content.parts[0].text)
+           || 'No response from AI.';
+        draggableainameResponse.textContent = draggableainameText;
+      } catch (draggableainameErr) {
+        draggableainameResponse.textContent = 'Error: ' + draggableainameErr.message;
+      }
+    });
+  })();
+</script>
+</body>
+</html>">
+  </iframe>
+
+  <script>
+    (function(){
+      const draggableainameFloatButton = document.getElementById('draggableainameFloatButton');
+      const draggableainameIframe = document.getElementById('draggableainameIframe');
+
+      draggableainameFloatButton.addEventListener('click', function(){
+        draggableainameIframe.style.display = 'block';
+        draggableainameFloatButton.style.display = 'none';
+      });
+
+      window.addEventListener('message', function(e){
+        if(e && e.data && e.data.type === 'draggableainame-close-iframe'){
+          draggableainameIframe.style.display = 'none';
+          draggableainameFloatButton.style.display = 'inline-block';
+        }
+      });
+
+      let draggableainameIsDragging = false;
+      let draggableainameStartX = 0, draggableainameStartY = 0;
+      let draggableainameOffsetX = 0, draggableainameOffsetY = 0;
+
+      const draggableainameStartDrag = function(ev){
+        ev.preventDefault();
+        draggableainameIsDragging = false;
+
+        const point = ev.touches ? ev.touches[0] : ev;
+        draggableainameStartX = point.clientX;
+        draggableainameStartY = point.clientY;
+
+        draggableainameOffsetX = draggableainameFloatButton.offsetLeft;
+        draggableainameOffsetY = draggableainameFloatButton.offsetTop;
+
+        document.addEventListener('mousemove', draggableainameOnMove);
+        document.addEventListener('mouseup', draggableainameStopDrag);
+        document.addEventListener('touchmove', draggableainameOnMove, { passive: false });
+        document.addEventListener('touchend', draggableainameStopDrag);
+      };
+
+      const draggableainameOnMove = function(ev){
+        ev.preventDefault();
+        const point = ev.touches ? ev.touches[0] : ev;
+        const dx = point.clientX - draggableainameStartX;
+        const dy = point.clientY - draggableainameStartY;
+
+        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) draggableainameIsDragging = true;
+
+        if (draggableainameIsDragging) {
+          let newX = draggableainameOffsetX + dx;
+          let newY = draggableainameOffsetY + dy;
+
+          const maxX = window.innerWidth - draggableainameFloatButton.offsetWidth;
+          const maxY = window.innerHeight - draggableainameFloatButton.offsetHeight;
+
+          newX = Math.max(0, Math.min(newX, maxX));
+          newY = Math.max(0, Math.min(newY, maxY));
+
+          draggableainameFloatButton.style.left = newX + 'px';
+          draggableainameFloatButton.style.top = newY + 'px';
+        }
+      };
+
+      const draggableainameStopDrag = function(){
+        document.removeEventListener('mousemove', draggableainameOnMove);
+        document.removeEventListener('mouseup', draggableainameStopDrag);
+        document.removeEventListener('touchmove', draggableainameOnMove);
+        document.removeEventListener('touchend', draggableainameStopDrag);
+      };
+
+      draggableainameFloatButton.addEventListener('mousedown', draggableainameStartDrag);
+      draggableainameFloatButton.addEventListener('touchstart', draggableainameStartDrag, { passive: false });
+    })();
+  </script>
+</div>
+</body>
+</html>
