@@ -196,7 +196,6 @@ td:hover .cell-resize-handle {
 .col-total-row td, tr:last-child td {
   min-height: 40px; 
 }
-
 </style>
 </head>
 <body>
@@ -242,7 +241,6 @@ request.onerror = function(e) {
     console.error("IndexedDB error:", e.target.errorCode);
 };
 
-// ---- Database helper functions ----
 function getMeta() {
     return new Promise(resolve => {
         const tx = db.transaction("meta","readonly").objectStore("meta").get(1);
@@ -278,7 +276,6 @@ function getAllCells() {
     });
 }
 
-// ---- Initialize table ----
 async function initTable() {
     let meta = await getMeta();
     if (!meta) {
@@ -291,7 +288,6 @@ async function initTable() {
     loadTable();
 }
 
-// ---- Column labeling ----
 function getColumnLabel(index) {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const cycle = Math.floor(index / 26);
@@ -299,14 +295,12 @@ function getColumnLabel(index) {
     return cycle === 0 ? letter : letter + (cycle + 1);
 }
 
-// ---- Load table dynamically ----
 async function loadTable() {
     const meta = await getMeta();
     const cells = await getAllCells();
     const tbody = document.querySelector('#table tbody');
     tbody.innerHTML = '';
 
-    // Header row
     const headerRow = document.createElement('tr');
     const emptyHeader = document.createElement('th'); emptyHeader.textContent='◢'; headerRow.appendChild(emptyHeader);
     for (let c=0; c<meta.cols; c++) {
@@ -317,17 +311,14 @@ async function loadTable() {
     headerRow.appendChild(document.createElement('th')); // empty corner cell
     tbody.appendChild(headerRow);
 
-    // Data rows
     for (let r=0; r<meta.rows; r++) {
         const tr = document.createElement('tr');
 
-        // Serial column
         const serialTd = document.createElement('td');
         serialTd.className = 'serial';
         serialTd.textContent = r+1;
         tr.appendChild(serialTd);
 
-        // Cells
         for (let c=0; c<meta.cols; c++) {
             const td = document.createElement('td');
             const input = document.createElement('input');
@@ -346,7 +337,6 @@ async function loadTable() {
             tr.appendChild(td);
         }
 
-        // Row buttons
         const tdBtn = document.createElement('td');
         const addBtn = document.createElement('button'); addBtn.textContent='+'; addBtn.className='add-btn'; addBtn.onclick=addColumn;
         const delBtn = document.createElement('button'); delBtn.textContent='🗑'; delBtn.className='delete-btn'; delBtn.onclick=deleteLastColumn;
@@ -356,7 +346,6 @@ async function loadTable() {
         tbody.appendChild(tr);
     }
 
-    // Add row buttons row
     const trAddRow = document.createElement('tr');
     const emptySerial = document.createElement('td'); emptySerial.className='serial'; trAddRow.appendChild(emptySerial);
     for (let c=0; c<meta.cols; c++) {
@@ -372,7 +361,6 @@ async function loadTable() {
     updateTotals();
 }
 
-// ---- Update totals ----
 async function updateTotals() {
     const meta = await getMeta();
     const tbody = document.querySelector('#table tbody');
@@ -381,7 +369,7 @@ async function updateTotals() {
     let grandTotal = 0;
 
     for (let r=0; r<meta.rows; r++) {
-        const tr = tbody.rows[r+1]; // skip header
+        const tr = tbody.rows[r+1];
         let rowTotal = 0;
 
         for (let c=0; c<meta.cols; c++) {
@@ -400,7 +388,6 @@ async function updateTotals() {
         grandTotal += rowTotal;
     }
 
-    // Column totals row
     let totalRow = tbody.querySelector('.col-total-row');
     if (!totalRow) {
         totalRow = document.createElement('tr'); totalRow.className='col-total-row';
@@ -414,7 +401,6 @@ async function updateTotals() {
     totalRow.cells[meta.cols+1].textContent = grandTotal;
 }
 
-// ---- Add/delete rows and columns ----
 async function addRow() {
     const meta = await getMeta();
     const newRow = meta.rows;
@@ -453,7 +439,6 @@ async function deleteLastColumn() {
     loadTable();
 }
 
-// ---- Highlight headers ----
 function highlightHeaders(rowIndex,colIndex){
     document.querySelectorAll('th').forEach(th => th.classList.remove('highlight'));
     document.querySelectorAll('.serial').forEach(td => td.classList.remove('highlight'));
@@ -467,7 +452,6 @@ function removeHighlight(){
     document.querySelectorAll('.serial').forEach(td => td.classList.remove('highlight'));
 }
 
-// ---- Cell resizing ----
 let startX,startY,startWidth,startHeight;
 function initCellResize(e,cell){
     e.preventDefault();
@@ -493,7 +477,7 @@ function initCellResize(e,cell){
            box-shadow:0 4px 8px rgba(0,0,0,0.2); user-select:none; z-index:1000;
            width:80px; height:80px; overflow:hidden;">
 
-    <img src="C:\Users\welcome\Pictures\Chitti2.webp" alt="AI"
+    <img src="chittibot.webp" alt="AI"
          style="width:100%; height:100%; object-fit:fill; border-radius:50%;">
   </button>
 </div>
