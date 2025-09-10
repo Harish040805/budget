@@ -210,6 +210,9 @@ td:hover .cell-resize-handle {
   <button onclick="addRow()">+ Row</button>
   <button onclick="deleteLastRow()">🗑 Row</button>
   <button onclick="downloadSheet()">_&darr;_ Download</button>
+  <button onclick="toggleRightBar()">Toggle Right Bar</button>
+  <button onclick="toggleBottomBar()">Toggle Bottom Bar</button>
+
 </div>
 </div>
 <script>
@@ -467,6 +470,46 @@ function initCellResize(e,cell){
         document.onmousemove=null; document.onmouseup=null;
     };
 }
+
+// ---- Download table as CSV ----
+function downloadSheet() {
+    let csv = [];
+    const rows = document.querySelectorAll("#budgetTable tr");
+
+    for (let row of rows) {
+        let cols = row.querySelectorAll("td, th");
+        let rowData = [];
+        for (let col of cols) {
+            // Escape double quotes
+            let text = col.innerText.replace(/"/g, '""');
+            rowData.push('"' + text + '"');
+        }
+        csv.push(rowData.join(","));
+    }
+
+    // Create CSV file
+    const blob = new Blob([csv.join("\n")], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+
+    // Trigger download
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "budget_sheet.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+// ---- Toggle Right-Bar and Bottom-Bar ----
+function toggleRightBar() {
+    const bar = document.querySelector(".right-bar");
+    bar.classList.toggle("hidden-bar");
+}
+
+function toggleBottomBar() {
+    const bar = document.querySelector(".bottom-bar");
+    bar.classList.toggle("hidden-bottom");
+}
+  
 </script>
 
 <div id="draggableainameWidget" style="width:100%; height:100%;">
