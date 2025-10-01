@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Green AI - AI Bot | Login</title>
+    <link rel="stylesheet" href="greenaiaibotlogincss.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link
+      rel="shortcut icon"
+      href="C:\Users\HP\OneDrive\Desktop\budgetsitewithgreenbot\budgetsitelogo.png"
+      type="image/x-icon"
+    />
+    <style>
+      @keyframes glitter {
+        0% {
+          transform: translate(0, 0) rotate(0deg);
+          opacity: 1;
+        }
+        25% {
+          transform: translate(50px, -30px) rotate(45deg);
+          opacity: 0.8;
+        }
+        50% {
+          transform: translate(100px, 20px) rotate(90deg);
+          opacity: 0.6;
+        }
+        75% {
+          transform: translate(150px, -50px) rotate(135deg);
+          opacity: 0.4;
+        }
+        100% {
+          transform: translate(200px, 0) rotate(180deg);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="splash">
+      <div>Green AI - AI Bot</div>
+      <img src="C:\Users\HP\OneDrive\Desktop\budgetsitewithgreenbot\budgetsitelogo.png" alt="splashscreenharish">
+      <div>Budget Management</div>
+    </div>
+    <div id="root"></div>
+    <button id="draggableainameFloatButton">🤖</button>
+    <iframe
+      id="draggableainameIframe"
+      style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 104vw;
+        height: 100vh;
+        border: none;
+        background: #fff;
+        box-shadow: -4px 0 12px rgba(0, 0, 0, 0.2);
+        display: none;
+        z-index: 2999;
+      "
+      src="greenaiaibot.html"
+    >
+    </iframe>
+    <button
+      id="closeAIButton"
+      style="
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        background: #e74c3c;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+        cursor: pointer;
+        display: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        z-index: 3000;
+      "
+    >
+      ✖
+    </button>
+    <button
+      class="password-strength"
+      id="password-strength"
+      aria-label="Password strength meter"
+      title="Password Strength"
+    >
+      <svg width="50" height="50">
+        <circle class="bg" cx="25" cy="25" r="25"></circle>
+        <circle class="progress" cx="25" cy="25" r="25"></circle>
+      </svg>
+      <span style="position: absolute; font-size: 20px"></span>
+    </button>
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+
+      const LoginForm = () => {
+        const [name, setName] = useState("");
+        const [phone, setPhone] = useState("");
+        const [email, setEmail] = useState("");
+        const [password, setPassword] = useState("");
+        const [confirmPassword, setConfirmPassword] = useState("");
+        const [passwordError, setPasswordError] = useState("");
+        const [confirm, setConfirm] = useState("");
+        const [captcha, setCaptcha] = useState({ a: 0, b: 0, answer: 0 });
+        const [captchaInput, setCaptchaInput] = useState("");
+
+        useEffect(() => {
+          generateCaptcha();
+        }, []);
+
+        const generateCaptcha = () => {
+          const a = Math.floor(Math.random() * 10) + 1;
+          const b = Math.floor(Math.random() * 10) + 1;
+          setCaptcha({ a, b, answer: a + b });
+          setCaptchaInput("");
+        };
+
+        const validateCaptcha = () =>
+          parseInt(captchaInput, 10) === captcha.answer;
+
+        const handlePhoneChange = (e) => {
+          let value = e.target.value.replace(/\D/g, "");
+          if (value.length > 10) value = value.slice(0, 10);
+          setPhone(value);
+        };
+
+        const validatePassword = () => {
+          let error = "";
+          const specialSymbols = /[!@#$%^&*]/g;
+
+          if (password.length < 8 || password.length > 32) {
+            error = "Password must be 8-32 characters long.";
+          } else if (!/[a-z]/.test(password)) {
+            error = "Password must contain at least one lowercase letter.";
+          } else if (!/[A-Z]/.test(password)) {
+            error = "Password must contain at least one uppercase letter.";
+          } else if (!/[0-9]/.test(password)) {
+            error = "Password must contain at least one digit.";
+          } else if ((password.match(specialSymbols) || []).length < 2) {
+            error =
+              "Password must contain at least two different special symbols.";
+          } else if (/\s/.test(password)) {
+            error = "Password cannot contain whitespace characters.";
+          } else if (/(\w)\1{2,}/.test(password)) {
+            error = "Password cannot contain repeated sequences.";
+          } else if (
+            /(0123|1234|2345|3456|4567|5678|6789|7890|abcd|bcde|cdef|defg)/i.test(
+              password
+            )
+          ) {
+            error = "Password cannot contain sequential characters.";
+          } else if (password.toLowerCase().includes(name.toLowerCase())) {
+            error = "Password cannot contain your username.";
+          } else if (password !== confirmPassword) {
+            error = "Passwords do not match.";
+          }
+
+          setPasswordError(error);
+          return error === "";
+        };
+
+        const handleAutoSubmit = () => {
+          if (
+            name &&
+            phone.length === 10 &&
+            email &&
+            password &&
+            confirmPassword &&
+            confirm === "yes" &&
+            validateCaptcha() &&
+            validatePassword()
+          ) {
+            try {
+              localStorage.setItem("userName", name);
+              localStorage.setItem("userEmail", email);
+            } catch (e) {}
+            window.location.href = "budgetwelcome.html";
+          }
+        };
+
+        useEffect(() => {
+          updateCircularMeter();
+          handleAutoSubmit();
+        }, [
+          name,
+          phone,
+          email,
+          password,
+          confirmPassword,
+          confirm,
+          captchaInput,
+        ]);
+
+        const updateCircularMeter = () => {
+          const progressCircle = document.querySelector(
+            ".password-strength .progress"
+          );
+          const circumference = 2 * Math.PI * 25;
+          let score = 0;
+          const total = 6;
+          if (name) score++;
+          if (phone.length === 10) score++;
+          if (email) score++;
+          if (password && validatePassword()) score++;
+          if (confirmPassword && password === confirmPassword) score++;
+          if (captchaInput && validateCaptcha()) score++;
+
+          const percent = score / total;
+          const offset = circumference * (1 - percent);
+          progressCircle.style.strokeDasharray = circumference;
+          progressCircle.style.strokeDashoffset = offset;
+
+          if (percent < 0.34) progressCircle.style.stroke = "#ff4d4d";
+          else if (percent < 0.67) progressCircle.style.stroke = "#ffcc00";
+          else progressCircle.style.stroke = "#4caf50";
+        };
+
+        return (
+          <div className="main">
+            <h3>🌱 AI Based Login Page 🤖</h3>
+            <h1>Green AI - Login</h1>
+            <h3>React JS Component</h3>
+            <br />
+            <form id="loginForm">
+              <table>
+                <tr>
+                  <td>
+                    <label htmlFor="na">User Name</label>
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      id="na"
+                      placeholder="Enter Name"
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </td>
+                </tr>
+                <br />
+                <tr>
+                  <td>
+                    <label htmlFor="number">Phone Number</label>
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      id="number"
+                      placeholder="Enter Number"
+                      required
+                      value={phone}
+                      onChange={handlePhoneChange}
+                    />
+                  </td>
+                </tr>
+                <br />
+                <tr>
+                  <td>
+                    <label htmlFor="email">Email ID</label>
+                  </td>
+                  <td>
+                    <input
+                      type="email"
+                      id="email"
+                      placeholder="Enter Email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </td>
+                </tr>
+                <br />
+                <tr>
+                  <td>
+                    <label htmlFor="password">Password</label>
+                  </td>
+                  <td>
+                    <div style={{ position: "relative" }}>
+                      <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter Password"
+                        required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        style={{ paddingRight: "40px" }}
+                      />
+                      <button
+                        type="button"
+                        id="togglePassword"
+                        onClick={() => {
+                          const input = document.getElementById("password");
+                          const icon = document.getElementById("iconPassword");
+                            if (input.type === "password") {
+                              input.type = "text";
+                              icon.className = "glyphicon glyphicon-eye-close";
+                            } else {
+                              input.type = "password";
+                              icon.className = "glyphicon glyphicon-eye-open";
+                            }
+                          }}
+                        style={{
+                          position: "absolute",
+                          right: "8px",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          border: "none",
+                          borderRadius: "50%",
+                          background: "transparent",
+                          cursor: "pointer",
+                          fontSize: "20px",
+                          color: "green",
+                        }}
+                      >
+                        <span id="iconPassword" className="glyphicon glyphicon-eye-open"></span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <br />
+                <tr>
+                  <td>
+                    <label htmlFor="confirmPassword">Confirm Password</label>
+                  </td>
+                  <td>
+                    <div style={{ position: "relative" }}>
+                      <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Confirm Password"
+                        required
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        style={{ paddingRight: "40px" }}
+                      />
+                      <button
+                        type="button"
+                        id="toggleConfirm"
+                        onClick={() => {
+                          const input = document.getElementById("confirmPassword");
+                          const icon = document.getElementById("iconConfirm");
+                            if (input.type === "password") {
+                            input.type = "text";
+                            icon.className = "glyphicon glyphicon-eye-close";
+                          } else {
+                            input.type = "password";
+                            icon.className = "glyphicon glyphicon-eye-open";
+                          }
+                        }}
+                        style={{
+                          position: "absolute",
+                          right: "8px",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          border: "none",
+                          background: "transparent",
+                          cursor: "pointer",
+                          fontSize: "20px",
+                          color: "green",
+                        }}
+                      >
+    <span id="iconConfirm" className="glyphicon glyphicon-eye-open"></span>
+  </button>
+</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan="2" style={{ color: "red", fontSize: "0.9em" }}>
+                    {passwordError && <div>{passwordError}</div>}
+                  </td>
+                </tr>
+                <br />
+                <tr>
+                  <td>
+                    <label>Confirm</label>
+                  </td>
+                  <td>
+                    <div className="radio-group">
+                      <input
+                        type="radio"
+                        name="confirm"
+                        id="yes"
+                        value="yes"
+                        checked={confirm === "yes"}
+                        onChange={(e) => setConfirm(e.target.value)}
+                        required
+                      />
+                      <label htmlFor="yes">Yes</label>
+                      <input
+                        type="radio"
+                        name="confirm"
+                        id="no"
+                        value="no"
+                        checked={confirm === "no"}
+                        onChange={(e) => setConfirm(e.target.value)}
+                        required
+                      />
+                      <label htmlFor="no">No</label>
+                    </div>
+                  </td>
+                </tr>
+                <tr className="captcha-row">
+                  <td>
+                    <label htmlFor="captchaInput">
+                      Captcha: &nbsp; &nbsp;{" "}
+                      <i>
+                        {captcha.a} + {captcha.b} = ?
+                      </i>
+                    </label>
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      id="captchaInput"
+                      placeholder="Answer"
+                      required
+                      value={captchaInput}
+                      onChange={(e) => setCaptchaInput(e.target.value)}
+                    />
+                  </td>
+                </tr>
+              </table>
+              <br />
+              @harishcreations
+            </form>
+          </div>
+        );
+      };
+
+      ReactDOM.createRoot(document.getElementById("root")).render(
+        <LoginForm />
+      );
+    </script>
+    <script src="draggableaijs.js"></script>
+    <script>
+      const floatBtn = document.getElementById("draggableainameFloatButton");
+      const iframe = document.getElementById("draggableainameIframe");
+      const closeBtn = document.getElementById("closeAIButton");
+
+      floatBtn.addEventListener("click", () => {
+        iframe.style.display = "block";
+        closeBtn.style.display = "block";
+        floatBtn.style.display = "none";
+      });
+
+      closeBtn.addEventListener("click", () => {
+        iframe.style.display = "none";
+        closeBtn.style.display = "none";
+        floatBtn.style.display = "inline-block";
+      });
+    </script>
+    <script>
+      function spawnGlitter() {
+        const glitter = document.createElement("div");
+        glitter.className = "glitter";
+        glitter.style.top = `${Math.random() * window.innerHeight}px`;
+        glitter.style.left = `${Math.random() * window.innerWidth}px`;
+        glitter.style.width = glitter.style.height = `${
+          Math.random() * 6 + 4
+        }px`;
+        glitter.style.animationDelay = `${Math.random() * 2}s`;
+        document.body.appendChild(glitter);
+
+        setTimeout(() => glitter.remove(), 5000);
+      }
+
+      let spawnRate = 20;
+
+      function dandelionEffect() {
+        for (let i = 0; i < 10; i++) {
+          spawnGlitter();
+        }
+
+        spawnRate += 10;
+
+        if (spawnRate <= 8000) {
+          setTimeout(dandelionEffect, spawnRate);
+        }
+      }
+
+      dandelionEffect();
+    </script>
+<button id="dateTimeToggle" style="position:fixed; top:130px; left:10px; width:50px; height:50px; border-radius:50%; border:none; background:linear-gradient(135deg, #8cdc8c4e, lightgreen); color:#fff; font-size:24px; cursor:pointer; z-index:999; box-shadow:0 4px 10px rgba(0,0,0,0.3);">⏰</button>
+<div id="dateTimeContainer" style="display:none; position:fixed; top:50px; left:90px; background:linear-gradient(135deg, #bcebbc, lightgreen); padding:12px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.2); z-index:9998; color:#656565; font-family:Arial, sans-serif;">  <div style="background:rgba(255,255,255,0.15); padding:10px; border-radius:8px; text-align:center;">
+    <div id="time" style="margin:3px 0; font-size:18px; font-weight:bold; letter-spacing:1px;"></div>
+    <div id="day" style="margin:3px 0; font-size:14px; font-weight:bold;"></div>
+    <div id="date" style="margin:3px 0; font-size:14px; font-weight:bold;"></div>
+  </div>
+</div>
+<script>
+  document.getElementById("dateTimeToggle").addEventListener("click", function() {
+    const container = document.getElementById("dateTimeContainer");
+    container.style.display = container.style.display === "none" ? "block" : "none";
+  });
+
+  (function updateDateTime(){
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2,'0');
+    const minutes = String(now.getMinutes()).padStart(2,'0');
+    const seconds = String(now.getSeconds()).padStart(2,'0');
+    document.getElementById("time").textContent = `${hours}:${minutes}:${seconds}`;
+
+    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    document.getElementById("day").textContent = days[now.getDay()];
+
+    const date = now.getDate();
+    const month = now.toLocaleString("default",{month:"long"});
+    const year = now.getFullYear();
+    document.getElementById("date").textContent = `${date} ${month}, ${year}`;
+
+    setTimeout(updateDateTime,1000);
+  })();
+</script>
+<button id="calculatorToggle" style="position:fixed; top:70px; left:10px; width:50px; height:50px; border-radius:50%; border:none; background:linear-gradient(135deg, #8cdc8c4e, lightgreen); color:#fff; font-size:24px; cursor:pointer; z-index:999; box-shadow:0 4px 10px rgba(0,0,0,0.3);">🔢</button>
+<style>
+.calcobudget{
+  padding:15px 0; 
+  font-size:18px; 
+  border:none; 
+  border-radius:6px; 
+  background:green; 
+  color:white; 
+  cursor:pointer;
+  width:100%;
+}
+.clear{
+  grid-column: span 4; 
+  padding:12px 0; 
+  font-size:18px; 
+  border:none; 
+  border-radius:6px; 
+  background:red; 
+  color:white; 
+  cursor:pointer;
+}
+</style>
+<div id="calculatorContainer" 
+     style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:40vw; max-width:300px; height:70vh; max-height:350px; background:linear-gradient(135deg, #bcebbc, lightgreen); padding:15px; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.3); z-index:998; color:#000; font-family:Arial, sans-serif; flex-direction:column; align-items:center; justify-content:flex-start;">
+  <input type="text" id="calcDisplay" style="width:95%; height:70px; font-size:24px; text-align:right; margin-bottom:15px; border:none; border-radius:6px; padding:6px; background:#e0f7e0;" readonly />
+  <div style="display:grid; grid-template-columns:repeat(4, 1fr); grid-gap:4px; width:95%; justify-items:center; align-items:center;">
+    <button class="calcobudget" onclick="appendCalc('7')">7</button>
+    <button class="calcobudget" onclick="appendCalc('8')">8</button>
+    <button class="calcobudget" onclick="appendCalc('9')">9</button>
+    <button class="calcobudget" onclick="appendCalc('/')">/</button>
+
+    <button class="calcobudget" onclick="appendCalc('4')">4</button>
+    <button class="calcobudget" onclick="appendCalc('5')">5</button>
+    <button class="calcobudget" onclick="appendCalc('6')">6</button>
+    <button class="calcobudget" onclick="appendCalc('*')">*</button>
+
+    <button class="calcobudget" onclick="appendCalc('1')">1</button>
+    <button class="calcobudget" onclick="appendCalc('2')">2</button>
+    <button class="calcobudget" onclick="appendCalc('3')">3</button>
+    <button class="calcobudget" onclick="appendCalc('-')">-</button>
+
+    <button class="calcobudget" onclick="appendCalc('0')">0</button>
+    <button class="calcobudget" onclick="appendCalc('.')">.</button>
+    <button class="calcobudget" onclick="calculate()">=</button>
+    <button class="calcobudget" onclick="appendCalc('+')">+</button>
+
+    <button class="clear" onclick="clearCalc()">CLEAR</button>
+  </div>
+</div>
+
+<script>
+document.getElementById("calculatorToggle").addEventListener("click", function(){
+  const container = document.getElementById("calculatorContainer");
+  if (container.style.display === "none" || container.style.display === "") {
+    container.style.display = "flex";
+  } else {
+    container.style.display = "none";
+  }
+});
+
+function appendCalc(value) {
+  document.getElementById("calcDisplay").value += value;
+}
+
+function clearCalc() {
+  document.getElementById("calcDisplay").value = '';
+}
+
+function calculate() {
+  try {
+    const result = eval(document.getElementById("calcDisplay").value);
+    document.getElementById("calcDisplay").value = result;
+  } catch {
+    document.getElementById("calcDisplay").value = "Error";
+  }
+}
+</script>
+
+  </body>
+</html>

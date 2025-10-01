@@ -1,0 +1,305 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: url('greenbot.gif') no-repeat right center fixed;
+  background-size: contain;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  color: #000;
+}
+.main {
+  background: linear-gradient(rgba(122, 255, 122, 0.8) 0%, rgba(177, 255, 177, 0.63) 70%);
+  border-radius: 15px;
+  padding: 25px 20px;
+  width: 600px;
+  height: 665px;
+  margin-left: 150px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  border: 3px solid #444;
+  color: rgb(50, 50, 50);
+  font-size: 18px;
+}
+h1, h3 {
+  margin: 0 0 8px 0;
+  font-weight: 600;
+  text-align: center;
+  color: #000;
+}
+h1 { font-size: 26px; }
+h3 { font-size: 23px; }
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 15px;
+}
+label {
+  font-weight: 600;
+  font-size: 20px;
+  color: black;
+  padding-right: 10px;
+  vertical-align: middle;
+  min-width: 90px;
+  display: inline-block;
+}
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"] {
+  width: 65%;
+  height: 36px;
+  border-radius: 20px;
+  border: 2px solid #d3d3d3;
+  padding: 0 8px;
+  font-size: 16px;
+  outline: none;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  color: black;
+}
+input:focus {
+  border-color: #2de645b3;
+  box-shadow: 0 0 6px #0c5f17b3;
+}
+td:last-child {
+  vertical-align: middle;
+}
+.radio-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.radio-group input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+.radio-group label {
+  font-weight: 500;
+  font-size: 16px;
+  cursor: pointer;
+  color: #101010;
+}
+::placeholder {
+  color: #bbb;
+  font-size: 14px;
+}
+form {
+  margin: 5px;
+}
+.captcha-row {
+  background-color: #b1ffb1;
+  border: 2px solid #4a90e2;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.captcha-row label {
+  font-weight: 600;
+  color: #000;
+  font-size: 15px;
+}
+.captcha-row input[type="text"] {
+  border-color: #393939;
+  font-weight: 600;
+  color: #000;
+  background-color: #fff;
+}
+.captcha-row input[type="text"]:focus {
+  border-color: #393939;
+  box-shadow: 0 0 8px #2de645b3;
+}
+#instructions {
+  margin-top: 8px;
+  font-size: 0.85em;
+}
+#instructions ul {
+  padding-left: 18px;
+}
+#instructions li {
+  margin-bottom: 4px;
+}
+#draggableainameFloatButton {
+  position: fixed; 
+  bottom: 80px; 
+  right: 20px; 
+  background: linear-gradient(
+    135deg,
+    rgba(196, 196, 196, 0.6) 0%,
+    rgba(255, 255, 255, 0.3) 100%
+  );
+  color: #fff; 
+  border: none; 
+  border-radius: 50%; 
+  width: 60px; 
+  height: 60px; 
+  font-size: 22px; 
+  cursor: pointer; 
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3); 
+  z-index: 1000;
+}
+#draggableainameFloatButton:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.6) 0%,
+    rgba(196, 196, 196, 0.3) 100%
+  );
+}
+@media screen and (max-width: 900px) {
+  body {
+    margin-left: 20px;
+    justify-content: center;
+  }
+  .main {
+    width: 90%;
+    padding: 30px 20px;
+    margin-left: 0;
+  }
+  h1 {
+    font-size: 26px;
+  }
+  h3 {
+    font-size: 20px;
+  }
+  label {
+    font-size: 16px;
+  }
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"] {
+    width: 100%;
+    height: 38px;
+    font-size: 16px;
+  }
+  table {
+    border-spacing: 0 15px;
+  }
+}
+@media screen and (max-width: 600px) {
+  body {
+    margin-left: 0;
+    justify-content: center;
+  }
+  .main {
+    width: 95%;
+    padding: 20px 15px;
+    border-radius: 15px;
+  }
+  h1 {
+    font-size: 22px;
+  }
+  h3 {
+    font-size: 18px;
+  }
+  label {
+    font-size: 14px;
+    min-width: 80px;
+  }
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"] {
+    height: 35px;
+    font-size: 14px;
+  }
+  table {
+    border-spacing: 0 12px;
+  }
+  .radio-group {
+    gap: 5px;
+  }
+  .captcha-row {
+    padding: 10px 12px !important;
+  }
+}
+.password-strength {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: none;
+  background: url('C:/Users/HP/OneDrive/Desktop/budgetsitewithgreenbot/ailoginmeterbackground.gif') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 4000;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+}
+.password-strength svg {
+  transform: rotate(-90deg);
+}
+.password-strength .bg {
+  fill: none;
+  stroke: #eee;
+  stroke-width: 5;
+}
+.password-strength .progress {
+  fill: none;
+  stroke-width: 7;        
+  stroke-linecap: round;
+  stroke-dasharray: 157;  
+  stroke-dashoffset: 157;
+  transition: stroke-dashoffset 0.4s ease, stroke 0.4s ease;
+}
+.glitter {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background: rgb(255, 255, 157);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 2000;
+}
+.glitter.animate {
+  animation: glitter 3s linear forwards;
+}
+.glitter {
+  animation: glitter 3s linear forwards;
+}
+#instructions ul {
+  padding-left: 20px;
+}
+#instructions li {
+  font-size: 0.9em;
+}
+#splash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  color:#037117;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  font-weight: bold;
+  z-index: 5000;
+  animation: fadeOut 1s ease forwards;
+  animation-delay: 2s; 
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+  #main-content {
+    display: none;
+    text-align: center;
+    padding: 50px;
+    color: #000;
+  }

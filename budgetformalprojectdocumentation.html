@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Green AI - AI Bot | Project Features - Formal Documentation</title>
+  <link rel="stylesheet" href="budgetformalprojectdocumentationcss.css">
+  <link rel="shortcut icon" href="C:\Users\HP\OneDrive\Desktop\budgetsitewithgreenbot\budgetsitelogo.png" type="image/x-icon">
+<style>
+.calcobudget{
+  padding:15px 0; 
+  font-size:18px; 
+  border:none; 
+  border-radius:6px; 
+  background:green; 
+  color:white; 
+  cursor:pointer;
+  width:100%;
+}
+.clear{
+  grid-column: span 4; 
+  padding:12px 0; 
+  font-size:18px; 
+  border:none; 
+  border-radius:6px; 
+  background:red; 
+  color:white; 
+  cursor:pointer;
+}
+.technologies{
+  border-collapse:collapse; 
+  width:80%; 
+  margin:auto; 
+  text-align:left;
+}
+</style>
+</head>
+<body>
+    <div id="splash">
+      <div>Green AI - AI Bot</div>
+      <img src="C:\Users\HP\OneDrive\Desktop\budgetsitewithgreenbot\budgetsitelogo.png" alt="splashscreenharish">
+      <div>Budget Management</div>
+    </div>
+<div id="#main">
+  <header>
+    <h1>Budget Management - Project Features</h1>
+    <h1>Formal Documentation</h1>
+  </header>
+  <main>
+    <section>
+      <h2>1. Green AI - Intelligent Login System</h2>
+      <p>
+        The Green AI module implements a secure, dynamic login page developed using React JS and enhanced with artificial 
+        intelligence. Unlike a standard login form, this system features modern authentication that automatically submits once all 
+        required user details have been entered. It also includes AI-driven validation and CAPTCHA verification. The system performs 
+        a dual role, acting as both a login and a sign-up page. If a user is new, it automatically stores their data when the fields 
+        are filled, functioning as a sign-up page. If an existing user fills the form, it functions as a login page. The AI monitors 
+        login attempts for unusual patterns, thereby improving security and reducing the risk of automated attacks. CAPTCHA 
+        integration adds an additional safeguard by distinguishing between human users and automated scripts. The interface is 
+        designed with a green theme and includes a glitter animation across the site, keeping the visual appearance consistent with 
+        the overall project identity. Additionally, the system features a circular password strength meter—represented with a dynamic 
+        progress circle and a shield icon—that updates in real time as the user enters their password and other login details. This 
+        meter visually indicates the strength and completeness of the form inputs, providing immediate feedback to users and 
+        enhancing both usability and security.
+      </p>
+    </section>
+    <section>
+      <h2>2. Budget Management Site</h2>
+      <p>
+        The Budget Management Site is designed to help users track and manage their daily expenditures on products and services. 
+        The interface allows users to input purchase details and maintains the data locally, ensuring that expenses can be reviewed 
+        at any time without requiring an internet connection. The site makes expense recording quick and user-friendly. The 
+        calculations are dynamically performed for the price entered by the user. It works similar to Microsoft Excel, but additionally, 
+        the dynamic calculation and autosave functionality ensures that the user-entered information is never lost accidentally. 
+        Creating a new row and column is done by dynamic DOM manipulation in JavaScript.
+      </p>
+    </section>
+    <section>
+      <h2>3. Income Management Site</h2>
+      <p>
+        The Income Management Site provides a structured way for users to categorize and allocate their income across multiple essential 
+        and optional categories. Input fields are restricted to numeric values, ensuring that data remains consistent and accurate. The 
+        supported categories cover common household and personal financial needs:
+      </p>
+      <ul>
+        <li>Rent</li>
+        <li>Utilities</li>
+        <li>Grocery</li>
+        <li>Transportation</li>
+        <li>Insurance</li>
+        <li>Entertainment</li>
+        <li>Health</li>
+        <li>Education</li>
+        <li>Savings</li>
+        <li>Other</li>
+      </ul>
+      <p>
+        This categorization not only simplifies record-keeping but also enables users to analyze their spending patterns and plan future 
+        budgets more effectively. When the user enters their total salary, the site facilitates salary allocation across categories while 
+        ensuring that the allocations do not exceed the total salary. If the entered amounts surpass the available salary, the system 
+        dynamically adjusts the maximum allowable value, thereby preventing users from exceeding the defined input limit.
+      </p>
+    </section>
+    <section>
+      <h2>4. Profit and Loss Calculator</h2>
+      <p>
+        The Profit and Loss Calculator is designed to help users dynamically determine profit or loss values, along with their 
+        corresponding percentages. By entering the Cost Price (CP) and Selling Price (SP), the system instantly computes whether 
+        the transaction resulted in a profit or a loss. 
+      </p>
+      <p>
+        The calculator provides the following outputs:
+      </p>
+      <ul>
+        <li><strong>Profit Amount</strong> - when the Selling Price exceeds the Cost Price.</li>
+        <li><strong>Loss Amount</strong> - when the Cost Price exceeds the Selling Price.</li>
+        <li><strong>Profit Percentage</strong> - calculated as (Profit ÷ Cost Price) × 100.</li>
+        <li><strong>Loss Percentage</strong>  calculated as (Loss ÷ Cost Price) × 100.</li>
+      </ul>
+      <p>
+        This tool is especially useful for students, businesses, and individuals to quickly analyze financial 
+        transactions without manual calculations. The dynamic computation ensures accuracy and saves time, 
+        making it a practical resource for day-to-day use in business mathematics.
+      </p>
+    </section>
+    <section>
+      <h2>5. Integration of Local Database with Autosave</h2>
+      <p>
+        Both the Budget Site and the Income Site are equipped with a local database mechanism. This design choice allows data to be 
+        stored directly in the user's browser, eliminating the dependency on external servers. The autosave feature records every 
+        change instantly, preventing data loss. Additionally, a clear button is provided, giving users full control to remove all stored 
+        information from the local database whenever required. This balance of persistence and flexibility makes the system both reliable 
+        and user-centric.
+      </p>
+    </section>
+    <section>
+      <h2>6. Download Functionality</h2>
+      <p>
+        The Budget Site provides a download feature that allows users to export the currently entered data sheet directly to their local
+        storage. The exported file can be viewed either as an Excel spreadsheet or as a formatted budget table, depending on the user's
+        preference. While the exported Excel sheet serves as a static record without autosave, dynamic calculations, or automatic salary
+        segregation, the web application itself continues to support these advanced features. This ensures that users benefit from both
+        the portability of offline records and the enhanced functionality of the online system.
+      </p>
+    </section>
+    <section>
+      <h2>7. Color Theme</h2>
+      <p>
+        The project adopts a green and white color theme as its primary design identity. Green was chosen to symbolize growth, balance, 
+        and sustainability, aligning well with the purpose of managing financial health. The consistent use of green across all modules 
+        ensures visual harmony and a professional appearance.
+      </p>
+    </section>
+    <section>
+      <h2>8. Technologies Implemented</h2>
+      <p>
+        The following technologies are used to create this site:
+      </p>
+      <div class="tech">
+          <table border="0" cellpadding="10" cellspacing="0" class="technologies">
+            <tr>
+              <th style="width:20%;">Category</th>
+              <th>Description</th>
+            </tr>
+            <tr>
+              <td><b>Technology</b></td>
+              <td>HTML, CSS, JavaScript, Keyframe Animations (Login Page)</td>
+            </tr>
+            <tr>
+              <td><b>Frameworks</b></td>
+              <td>React JS</td>
+            </tr>
+            <tr>
+              <td><b>Features</b></td>
+              <td>Draggable AI, Local Database, Dynamic Updates for User Inputs, Auto Save</td>
+            </tr>
+          </table>
+      </div>
+      <p>
+        Together, these technologies allow the platform to remain lightweight, functional, and independent of external dependencies.
+      </p>
+    </section>
+    <section>
+      <h2>9. Splash Screens</h2>
+      <p>
+        Each main module of the project is introduced with a splash screen. The splash screens serve as entry points, displaying the 
+        title and theme of the respective module before the main interface loads. This enhances user experience by providing a smooth and 
+        professional transition into the application. Additionally, a custom logo related to economics and budgeting is being designed 
+        using Figma, exported and integrated into all splash screens, ensuring visual consistency and reinforcing the theme of budget 
+        management across the site.
+      </p>
+    </section>
+	  <section>
+      <h2>10. Artificial Intelligence Integration (Speech AI)</h2>
+      <p>
+        Google's Gemini AI is integrated throughout the project to enhance functionality and user experience. It provides intelligent 
+        validation, advanced input assistance, and robust security features. In the Green AI login system, the AI detects unusual login 
+        patterns and automates CAPTCHA verification. Within the Budget and Income sections, it offers guidance on optimal salary 
+        allocation, flags potential overspending, and delivers personalized financial recommendations. Accessible via a draggable floating 
+        bot button, the AI assistant can speak responses, provide contextual support, and address user queries, ensuring the platform 
+        adapts dynamically to user needs. By combining AI-driven decision support with local database persistence, the system delivers 
+        both intelligence and reliability in personal finance management.
+      </p>
+    </section>
+    <section>
+      <h2>11. Live Time and Date</h2>
+      <p>
+        This feature displays the current time and date dynamically on the interface. Users can toggle a dedicated panel to view 
+        real-time updates of hours, minutes, seconds, day of the week, and full date. The time is updated every second, ensuring accurate 
+        tracking. This is implemented using JavaScript's Date object and setTimeout to refresh the display continuously. The panel is 
+        designed with a green-themed gradient and semi-transparent background for readability and visual consistency with the overall 
+        project theme.
+      </p>
+    </section>
+    <section>
+      <h2>12. Simple Calculator</h2>
+      <p>
+        The Simple Calculator provides users with basic arithmetic operations (addition, subtraction, multiplication, division) 
+        directly within the application. It includes a numeric display and a grid of buttons for numbers and operators. 
+        Users can input numbers, perform calculations, and clear the display as needed. The calculator uses JavaScript 
+        to handle input, calculation, and error detection, ensuring that invalid operations are caught and reported. 
+        This feature is accessible via a floating toggle button and appears as a centered panel, styled with green-themed 
+        gradients, rounded corners, and shadows to maintain consistency with the project's visual identity.
+      </p>
+    </section>
+  </main>
+  <footer>
+    &copy; Formal Project Documentation | Harish Creations | Internal Use |
+    <a class="formalprojectdoc" href="C:/Users/HP/OneDrive/Desktop/budgetsitewithgreenbot/budgettermsofservice.html">Terms of Service</a>
+  </footer>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const splash = document.getElementById('splash');
+    const main = document.getElementById('main-content');
+    setTimeout(() => {
+      splash.style.opacity = '0';
+      setTimeout(() => {
+        splash.style.display = 'none';
+        main.style.display = 'block';
+      }, 1000);
+    }, 2500);
+  });
+</script>
+</div>
+<button id="draggableainameFloatButton">
+🤖</button>
+<iframe id="draggableainameIframe" 
+  style="position:fixed; top:0; left:0; width:104vw; height:100vh; border:none; background:#fff;
+  box-shadow:-4px 0 12px rgba(0,0,0,0.2); display:none; z-index:999;"
+  src="greenaiaibot.html">
+</iframe>
+</iframe>
+
+<button id="closeAIButton" style="position:fixed; top:10px; left:10px; background:#e74c3c; color:#fff; border:none; border-radius:50%; 
+width:35px; height:35px; font-size:18px; cursor:pointer; display:none; box-shadow:0 2px 6px rgba(0,0,0,0.3); z-index:1001;"> ✖ </button>
+<script src="budgetformalprojectdocumentationjs.js"></script>
+<script src="draggableaijs.js"></script>
+<div id="login-details">
+  <strong id="displayName">Guest</strong><br>
+  <small id="displayEmail">Not Provided</small>
+</div>
+<script>
+  const storedName = localStorage.getItem("userName") || "Guest";
+  const storedEmail = localStorage.getItem("userEmail") || "Not Provided";
+
+  document.getElementById("displayName").textContent = storedName; 
+  document.getElementById("displayEmail").textContent = storedEmail;
+
+  const loginDetails = document.getElementById("login-details");
+
+  loginDetails.style.position = "fixed";
+  loginDetails.style.top = "10px";
+  loginDetails.style.right = "10px";
+  loginDetails.style.textAlign = "left";
+  loginDetails.style.fontFamily = "Arial, sans-serif";
+  loginDetails.style.color = "#2c3e50";
+
+  loginDetails.style.background = "rgba(255, 255, 255, 0.85)";
+  loginDetails.style.padding = "10px 15px";
+  loginDetails.style.borderRadius = "8px";
+  loginDetails.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.2)";
+  loginDetails.style.zIndex = "2000";
+</script>
+<button id="dateTimeToggle" style="position:fixed; top:130px; left:10px; width:50px; height:50px; border-radius:50%; border:none; background:linear-gradient(135deg, #8cdc8c4e, lightgreen); color:#fff; font-size:24px; cursor:pointer; z-index:999; box-shadow:0 4px 10px rgba(0,0,0,0.3);">⏰</button>
+<div id="dateTimeContainer" style="display:none; position:fixed; top:50px; left:90px; background:linear-gradient(135deg, #bcebbc, lightgreen); padding:12px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.2); z-index:9998; color:#656565; font-family:Arial, sans-serif;">  <div style="background:rgba(255,255,255,0.15); padding:10px; border-radius:8px; text-align:center;">
+    <div id="time" style="margin:3px 0; font-size:18px; font-weight:bold; letter-spacing:1px;"></div>
+    <div id="day" style="margin:3px 0; font-size:14px; font-weight:bold;"></div>
+    <div id="date" style="margin:3px 0; font-size:14px; font-weight:bold;"></div>
+  </div>
+</div>
+<script>
+  document.getElementById("dateTimeToggle").addEventListener("click", function() {
+    const container = document.getElementById("dateTimeContainer");
+    container.style.display = container.style.display === "none" ? "block" : "none";
+  });
+
+  (function updateDateTime(){
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2,'0');
+    const minutes = String(now.getMinutes()).padStart(2,'0');
+    const seconds = String(now.getSeconds()).padStart(2,'0');
+    document.getElementById("time").textContent = `${hours}:${minutes}:${seconds}`;
+
+    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    document.getElementById("day").textContent = days[now.getDay()];
+
+    const date = now.getDate();
+    const month = now.toLocaleString("default",{month:"long"});
+    const year = now.getFullYear();
+    document.getElementById("date").textContent = `${date} ${month}, ${year}`;
+
+    setTimeout(updateDateTime,1000);
+  })();
+</script>
+<button id="calculatorToggle" style="position:fixed; top:70px; left:10px; width:50px; height:50px; border-radius:50%; border:none; background:linear-gradient(135deg, #8cdc8c4e, lightgreen); color:#fff; font-size:24px; cursor:pointer; z-index:999; box-shadow:0 4px 10px rgba(0,0,0,0.3);">🔢</button>
+<div id="calculatorContainer" 
+     style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:40vw; max-width:300px; height:70vh; max-height:350px; background:linear-gradient(135deg, #bcebbc, lightgreen); padding:15px; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.3); z-index:998; color:#000; font-family:Arial, sans-serif; flex-direction:column; align-items:center; justify-content:flex-start;">
+  <input type="text" id="calcDisplay" style="width:95%; height:70px; font-size:24px; text-align:right; margin-bottom:15px; border:none; border-radius:6px; padding:6px; background:#e0f7e0;" readonly />
+  <div style="display:grid; grid-template-columns:repeat(4, 1fr); grid-gap:4px; width:95%; justify-items:center; align-items:center;">
+    <button class="calcobudget" onclick="appendCalc('7')">7</button>
+    <button class="calcobudget" onclick="appendCalc('8')">8</button>
+    <button class="calcobudget" onclick="appendCalc('9')">9</button>
+    <button class="calcobudget" onclick="appendCalc('/')">/</button>
+
+    <button class="calcobudget" onclick="appendCalc('4')">4</button>
+    <button class="calcobudget" onclick="appendCalc('5')">5</button>
+    <button class="calcobudget" onclick="appendCalc('6')">6</button>
+    <button class="calcobudget" onclick="appendCalc('*')">*</button>
+
+    <button class="calcobudget" onclick="appendCalc('1')">1</button>
+    <button class="calcobudget" onclick="appendCalc('2')">2</button>
+    <button class="calcobudget" onclick="appendCalc('3')">3</button>
+    <button class="calcobudget" onclick="appendCalc('-')">-</button>
+
+    <button class="calcobudget" onclick="appendCalc('0')">0</button>
+    <button class="calcobudget" onclick="appendCalc('.')">.</button>
+    <button class="calcobudget" onclick="calculate()">=</button>
+    <button class="calcobudget" onclick="appendCalc('+')">+</button>
+
+    <button class="clear" onclick="clearCalc()">CLEAR</button>
+  </div>
+</div>
+
+<script>
+document.getElementById("calculatorToggle").addEventListener("click", function(){
+  const container = document.getElementById("calculatorContainer");
+  if (container.style.display === "none" || container.style.display === "") {
+    container.style.display = "flex";
+  } else {
+    container.style.display = "none";
+  }
+});
+
+function appendCalc(value) {
+  document.getElementById("calcDisplay").value += value;
+}
+
+function clearCalc() {
+  document.getElementById("calcDisplay").value = '';
+}
+
+function calculate() {
+  try {
+    const result = eval(document.getElementById("calcDisplay").value);
+    document.getElementById("calcDisplay").value = result;
+  } catch {
+    document.getElementById("calcDisplay").value = "Error";
+  }
+}
+</script>
+</body>
+</html>
