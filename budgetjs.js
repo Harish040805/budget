@@ -265,13 +265,15 @@ function initCellResize(e,cell){
 
 function downloadSheet() {
     let csv = [];
-    const rows = document.querySelectorAll("#budgetTable tr");
+    const rows = document.querySelectorAll("#table tr");
 
     for (let row of rows) {
         let cols = row.querySelectorAll("td, th");
         let rowData = [];
         for (let col of cols) {
-            let text = col.innerText.replace(/"/g, '""');
+            const input = col.querySelector("input");
+            let text = input ? input.value : col.innerText;
+            text = text.replace(/"/g, '""');
             rowData.push('"' + text + '"');
         }
         csv.push(rowData.join(","));
