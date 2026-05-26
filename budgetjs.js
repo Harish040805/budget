@@ -264,29 +264,32 @@ function initCellResize(e,cell){
 }
 
 function downloadSheet() {
-    let csv = [];
-    const rows = document.querySelectorAll("#table tr");
+    const table = document.getElementById("table");
+    const data = [];
+    const rows = table.querySelectorAll("tr");
 
-    for (let row of rows) {
-        let cols = row.querySelectorAll("td, th");
-        let rowData = [];
-        for (let col of cols) {
-            const input = col.querySelector("input");
-            let text = input ? input.value : col.innerText;
-            text = text.replace(/"/g, '""');
-            rowData.push('"' + text + '"');
+    for (let i = 0; i < rows.length; i++) {
+        const rowData = [];
+        const cells = rows[i].querySelectorAll("th, td");
+        
+        for (let j = 0; j < cells.length; j++) {
+            const input = cells[j].querySelector("input");
+            if (input) {
+                const val = parseFloat(input.value);
+                rowData.push(!isNaN(val) ? val : input.value);
+            } else {
+                const text = cells[j].innerText.trim();
+                const val = parseFloat(text);
+                rowData.push(!isNaN(val) && cells[j].classList.contains("total-cell") ? val : text);
+            }
         }
-        csv.push(rowData.join(","));
+        data.push(rowData);
     }
 
-    const blob = new Blob([csv.join("\n")], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "budget_sheet.csv";
-    a.click();
-    URL.revokeObjectURL(url);
+    const worksheet = XLSX.utils.aoa_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Budget");
+    XLSX.writeFile(workbook, "budget_sheet.xlsx");
 }
 
 function toggleRightBar() {
