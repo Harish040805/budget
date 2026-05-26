@@ -269,10 +269,12 @@ function downloadSheet() {
     const rows = table.querySelectorAll("tr");
 
     for (let i = 0; i < rows.length; i++) {
+        if (i === rows.length - 1) continue;
+
         const rowData = [];
         const cells = rows[i].querySelectorAll("th, td");
         
-        for (let j = 0; j < cells.length; j++) {
+        for (let j = 0; j < cells.length - 1; j++) {
             const input = cells[j].querySelector("input");
             if (input) {
                 const val = parseFloat(input.value);
